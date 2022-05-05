@@ -1,38 +1,28 @@
-class Graph():
+class Graph:
+    def __init__(self, edges, n):
+        self.adjList = [[] for _ in range(n)]
+        for (i, j) in edges:
+            self.adjList[i].append(j)
+            self.adjList[j].append(i)
+            
+def colorGraph(graph, n):
+    result = {}
+    for u in range(n):
+        assigned = set([result.get(i) for i in graph.adjList[u] if i in result])
+        color = 1
+        for c in assigned:
+            if color != c:
+                break
+            color = color + 1
+        result[u] = color
  
-    def __init__(self, vertices):
-        self.V = vertices
-        self.graph = [[0 for column in range(vertices)]\
-                              for row in range(vertices)]
+    for v in range(n):
+        print(f'Color assigned to vertex {v} is {colors[result[v]]}')
+        
+if __name__ == '__main__':
  
-    def isSafe(self, v, colour, c):
-        for i in range(self.V):
-            if self.graph[v][i] == 1 and colour[i] == c:
-                return False
-        return True
-   
-    def graphColourUtil(self, m, colour, v):
-        if v == self.V:
-            return True
- 
-        for c in range(1, m + 1):
-            if self.isSafe(v, colour, c) == True:
-                colour[v] = c
-                if self.graphColourUtil(m, colour, v + 1) == True:
-                    return True
-                colour[v] = 0
- 
-    def graphColouring(self, m):
-        colour = [0] * self.V
-        if self.graphColourUtil(m, colour, 0) == None:
-            return False
- 
-        print ("Solution exist and Following are the assigned colours:")
-        for c in colour:
-            print (c,end=' ')
-        return True
-
-g = Graph(4)
-g.graph = [[0, 1, 1, 1], [1, 0, 1, 0], [1, 1, 0, 1], [1, 0, 1, 0]]
-m = 3
-g.graphColouring(m)
+    colors = ['', 'BLUE', 'GREEN', 'RED', 'YELLOW', 'ORANGE', 'PINK','BLACK', 'BROWN', 'WHITE', 'PURPLE', 'VOILET']
+    edges = [(0, 1), (0, 4), (0, 5), (4, 5), (1, 4), (1, 3), (2, 3), (2, 4)]
+    n = 6
+    graph = Graph(edges, n)
+    colorGraph(graph, n)
